@@ -1,6 +1,6 @@
 # Aris Bot
 
-Aris Bot is a person Discord Bot used to bet on league sports and personal video game matches.
+Aris Bot is a personal Discord Bot used to bet on league sports and personal video game matches.
 
 Uses Go and MySQL to run 
 
