@@ -140,7 +140,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 			getTodaysGames(s)
 		default: //!bet, ....
 			{
-				betNBAGame(userInput)
+				betNBAGame(m.Author.ID, userInput, s)
 				return
 			}
 		}
@@ -216,6 +216,20 @@ func getBalance(id string, s *discordgo.Session) int {
 		}
 	}
 	return number
+}
+
+func getBalanceId(id string, s *discordgo.Session) string {
+	var idString string
+	err := db.QueryRow("SELECT ID from balance where ProfileID = ?", id).Scan(&idString) //Gets and stores number
+	if err != nil {
+		if strings.Contains(err.Error(), "no rows") {
+			// Handle the permission-denied error
+			s.ChannelMessageSend(chatString, "No matching rows! Hmph~!")
+		} else {
+			panic(err.Error())
+		}
+	}
+	return idString
 }
 
 func getLoginDate(id string, s *discordgo.Session) string {
@@ -398,7 +412,8 @@ func getPastGames(s *discordgo.Session) {
 	s.ChannelMessageSend(chatString, postLine)
 }
 
-func betNBAGame(input string) {
+func betNBAGame(id string, input string, s *discordgo.Session) {
+	currBalance := getBalance(id, s)
 	amount := ""
 	team := ""
 	if strings.HasPrefix(input, "!bet ") {
@@ -418,11 +433,52 @@ func betNBAGame(input string) {
 		}
 		if amount == "" || team == "" {
 			fmt.Println("Error, wrong parameters")
+			return
+		}
+	}
+	numAmount, err := strconv.Atoi(amount)
+	if err != nil {
+		fmt.Println("Error, not a number")
+		return
+	}
+	//Case if amount bet is over actual amount (Negative)
+	if (currBalance - numAmount) < 0 {
+		fmt.Println("Error, too high of a bet")
+		return
+	}
+	query := "UPDATE balance SET balance = balance - ? where ProfileID = ?;"
+	_, err = db.Exec(query, amount, id) //Look into context timeout
+	if err != nil {
+		//Case where no matching rows
+		if strings.Contains(err.Error(), "no rows") {
+			// Handle the permission-denied error
+			s.ChannelMessageSend(chatString, "No matching rows! Hmph~!")
+		} else {
+			panic(err.Error())
+		}
+	} else {
+		//Update transaction log
+		uuid := strings.Replace(uuid.New().String(), "-", "", -1)
+		balanceId := getBalanceId(id, s)
+		typeOfBet := "ML"
+		comment := "Testing"
+		currDate := time.Now().Format("2006-01-02 15:04:05")
+		query = "INSERT INTO log_book VALUES(?, ?, ?, ?, ?, ?);"
+		_, err = db.Exec(query, uuid, numAmount, typeOfBet, comment, currDate, balanceId) //Look into context timeout
+		if err != nil {
+			//Case where duplicate entry
+			if strings.Contains(err.Error(), "Duplicate entry") {
+				// Handle the permission-denied error
+				s.ChannelMessageSend(chatString, "Already registered balance transaction! Hmph~!")
+			} else {
+				panic(err.Error())
+			}
+		} else {
+			fmt.Println("Bet " + amount + " on " + team + " with XX odds")
+			s.ChannelMessageSend(chatString, "Updated Balance to "+strconv.Itoa(currBalance-numAmount)+"\n")
 		}
 	}
 
-	//Subtract from balance
-	//Update transaction log
 	//At 5am EST update for NBA (LCS will be different)
 }
 
@@ -459,7 +515,7 @@ func matchNBATeam(input string) string {
 		return "Los Angeles Lakers"
 	case "memphis grizzlies", "grizzlies", "mem", "grizz":
 		return "Memphis Grizzlies"
-	case "miami heat", "heat", "mia":
+	case "miami heat", "heat", "mia", "miami":
 		return "Miami Heat"
 	case "milwaukee bucks", "bucks", "mil":
 		return "Milwaukee Bucks"
