@@ -1,10 +1,8 @@
 {
-    "Token" : "MTA3NDA1ODIwODk5OTY0OTM4MA.Gkc2FA.guEyHIQsZE8Tz8lt2zaqkOVoGB4RUkWJ5_Lt9U",
+    "Token" : "",
     "BotPrefix" : "!",
-    "SQLPassword" : "Heatwonitall1!",
-    "TRN-Api-Key" : "7fed2543-373b-44c0-8b03-48c20ef2f118",
-    "X-RapidAPI-Key" : "6d2843e3aemsh9125328c02995dcp112689jsneac53d5291c8",
-    "X-RapidAPI-Host" : "odds.p.rapidapi.com",
+    "SQLPassword" : "",
+    "TRN-Api-Key" : "",
 
     "AlexNames": ["summit", "weiwei", "yagao", "ruler", "hang", "gumayusi", "crisp"],
     "AlexIDs": ["1264", "2124", "1278", "685", "2670", "3247", "1169"],
