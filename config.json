@@ -12,8 +12,8 @@
     "PatrickIDs": ["1242", "2360", "610", "1303", "1971", "732", "1138"],
     "KrikorNames": ["zeus", "oner", "knight", "deft", "trymbi", "showmaker", "dhokla"],
     "KrikorIDs": ["3658", "3741", "1270", "44", "2046", "1250", "1135"],
-    "FelixNames": ["zika", "xun", "caps", "peyz", "delight", "brokenblade", "humanoid"],
-    "FelixIDs": ["4473", "3330", "802", "4247", "3411", "1310", "1716"],
+    "FelixNames": ["zika", "xun", "caps", "peyz", "delight", "brokenblade", "ignar"],
+    "FelixIDs": ["4473", "3330", "802", "4247", "3411", "1310", "463"],
     "AlecNames": ["theshy", "cuzz", "chovy", "aiming", "missing", "yike", "contractz"],
     "AlecIDs": ["1075", "983", "1629", "1328", "1647", "3406", "733"],
     "GabrielNames": ["kiin", "peanut", "faker", "gala", "mikyx", "berserker", "blaber"],
@@ -27,8 +27,8 @@
     "AlexIDsPlayin": ["3736", "2907", "2869", "4584", "2862"],
     "PatrickNamesPlayin": ["azhi", "croc", "kati", "slayder", "bie"],
     "PatrickIDsPlayin": ["2863", "2746", "2213", "1438", "1461"],
-    "KrikorNamesPlayin": ["yutapon", "beanj", "gloryy", "milan", "huhi"],
-    "KrikorIDsPlayin": ["535", "3551", "1104", "3557", "579"],
+    "KrikorNamesPlayin": ["robo", "beanj", "gloryy", "yutapon", "huhi"],
+    "KrikorIDsPlayin": ["845", "3551", "1104", "535", "579"],
     "FelixNamesPlayin": ["kiaya", "levi", "mireu", "stixxay", "palette"],
     "FelixIDsPlayin": ["1671", "974", "3097", "580", "1196"],
     "AlecNamesPlayin": ["bong", "river", "gori", "artemis", "labrov"],
@@ -38,5 +38,8 @@
     "KennethNamesPlayin": ["adam", "steal", "aria", "wako", "lyonz"],
     "KennethIDsPlayin": ["3489", "878", "452", "929", "5029"],
     "QuincyNamesPlayin": ["licorice", "sheo", "nuc", "route", "shiauc"],
-    "QuincyIDsPlayin": ["852", "3248", "3486", "1644", "1420"]
+    "QuincyIDsPlayin": ["852", "3248", "3486", "1644", "1420"],
+
+    "PlayinList": ["kiaya", "levi","kati", "slayder","palette", "adam","sheo","nuc","crownie","labrov"],
+    "PlayinListID": ["1671", "974","2213", "1438","1196", "3489","3248","3486","1209","2887"]
 }

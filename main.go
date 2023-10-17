@@ -27,11 +27,10 @@ import (
 )
 
 type Config struct {
-	Token         string `json:"Token"`
-	SQLPassword   string `json:"SQLPassword"`
-	RapidAPIKey   string `json:"X-RapidAPI-Key"`
-	RapidAPIHost  string `json:"X-RapidAPI-Host"`
-	SpreadsheetID string `json:""SpreadsheetID""`
+	Token        string `json:"Token"`
+	SQLPassword  string `json:"SQLPassword"`
+	RapidAPIKey  string `json:"X-RapidAPI-Key"`
+	RapidAPIHost string `json:"X-RapidAPI-Host"`
 
 	AlexNames    []string `json:"AlexNames"`
 	AlexIDs      []string `json:"AlexIDs"`
@@ -66,6 +65,9 @@ type Config struct {
 	KennethIDsPlayin   []string `json:"KennethIDsPlayin"`
 	QuincyNamesPlayin  []string `json:"QuincyNamesPlayin"`
 	QuincyIDsPlayin    []string `json:"QuincyIDsPlayin"`
+
+	PlayinList   []string `json:"PlayinList"`
+	PlayinListID []string `json:"PlayinListID"`
 }
 
 type Outcomes_Info struct {
@@ -187,33 +189,51 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 				updateWorlds(s, config.KennethNames, config.KennethIDs, "kenneth", true)
 			case "quincy":
 				updateWorlds(s, config.QuincyNames, config.QuincyIDs, "quincy", true)
-			// case "test":
-			// 	insertInSheet(speadsheetID, "69")
+			case "update":
+				updateWorlds(s, config.AlexNames, config.AlexIDs, "alex", true)
+				updateWorlds(s, config.PatrickNames, config.PatrickIDs, "patrick", true)
+				updateWorlds(s, config.KrikorNames, config.KrikorIDs, "krikor", true)
+				updateWorlds(s, config.FelixNames, config.FelixIDs, "felix", true)
+				updateWorlds(s, config.AlecNames, config.AlecIDs, "alec", true)
+				updateWorlds(s, config.GabrielNames, config.GabrielIDs, "gabriel", true)
+				updateWorlds(s, config.KennethNames, config.KennethIDs, "kenneth", true)
+				updateWorlds(s, config.QuincyNames, config.QuincyIDs, "quincy", true)
+				updatePlayinTeams(s, config.PlayinList, config.PlayinListID)
+				s.ChannelMessageSend(chatString, "Done Updating")
 			default:
 				getWorldsID(s, parts[1], true)
 			}
 		}
 		if len(parts) > 1 && parts[0] == "!playin" {
-			switch strings.ToLower(parts[1]) {
-			case "alex":
-				updateWorlds(s, config.AlexNamesPlayin, config.AlexIDsPlayin, "alex", false)
-			case "patrick":
-				updateWorlds(s, config.PatrickNamesPlayin, config.PatrickIDsPlayin, "patrick", false)
-			case "krikor":
-				updateWorlds(s, config.KrikorNamesPlayin, config.KrikorIDsPlayin, "krikor", false)
-			case "felix":
-				updateWorlds(s, config.FelixNamesPlayin, config.FelixIDsPlayin, "felix", false)
-			case "alec":
-				updateWorlds(s, config.AlecNamesPlayin, config.AlecIDsPlayin, "alec", false)
-			case "gabriel":
-				updateWorlds(s, config.GabrielNamesPlayin, config.GabrielIDsPlayin, "gabriel", false)
-			case "kenneth":
-				updateWorlds(s, config.KennethNamesPlayin, config.KennethIDsPlayin, "kenneth", false)
-			case "quincy":
-				updateWorlds(s, config.QuincyNamesPlayin, config.QuincyIDsPlayin, "quincy", false)
-			default:
-				getWorldsID(s, parts[1], false)
-			}
+			// switch strings.ToLower(parts[1]) {
+			// case "alex":
+			// 	updateWorlds(s, config.AlexNamesPlayin, config.AlexIDsPlayin, "alex", config.PlayinList, false)
+			// case "patrick":
+			// 	updateWorlds(s, config.PatrickNamesPlayin, config.PatrickIDsPlayin, "patrick", config.PlayinList, false)
+			// case "krikor":
+			// 	updateWorlds(s, config.KrikorNamesPlayin, config.KrikorIDsPlayin, "krikor", config.PlayinList, false)
+			// case "felix":
+			// 	updateWorlds(s, config.FelixNamesPlayin, config.FelixIDsPlayin, "felix", config.PlayinList, false)
+			// case "alec":
+			// 	updateWorlds(s, config.AlecNamesPlayin, config.AlecIDsPlayin, "alec", config.PlayinList, false)
+			// case "gabriel":
+			// 	updateWorlds(s, config.GabrielNamesPlayin, config.GabrielIDsPlayin, "gabriel", config.PlayinList, false)
+			// case "kenneth":
+			// 	updateWorlds(s, config.KennethNamesPlayin, config.KennethIDsPlayin, "kenneth", config.PlayinList, false)
+			// case "quincy":
+			// 	updateWorlds(s, config.QuincyNamesPlayin, config.QuincyIDsPlayin, "quincy", config.PlayinList, false)
+			// case "update":
+			// 	updateWorlds(s, config.AlexNamesPlayin, config.AlexIDsPlayin, "alex", config.PlayinList, false)
+			// 	updateWorlds(s, config.PatrickNamesPlayin, config.PatrickIDsPlayin, "patrick", config.PlayinList, false)
+			// 	updateWorlds(s, config.KrikorNamesPlayin, config.KrikorIDsPlayin, "krikor", config.PlayinList, false)
+			// 	updateWorlds(s, config.FelixNamesPlayin, config.FelixIDsPlayin, "felix", config.PlayinList, false)
+			// 	updateWorlds(s, config.AlecNamesPlayin, config.AlecIDsPlayin, "alec", config.PlayinList, false)
+			// 	updateWorlds(s, config.GabrielNamesPlayin, config.GabrielIDsPlayin, "gabriel", config.PlayinList, false)
+			// 	updateWorlds(s, config.KennethNamesPlayin, config.KennethIDsPlayin, "kenneth", config.PlayinList, false)
+			// 	updateWorlds(s, config.QuincyNamesPlayin, config.QuincyIDsPlayin, "quincy", config.PlayinList, false)
+			// default:
+			getWorldsID(s, parts[1], false)
+			// }
 
 			// } else {
 			// switch strings.ToLower(userInput) {
@@ -247,9 +267,9 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 func getWorldsID(s *discordgo.Session, playerName string, mainEvent bool) {
 	id := "NOT FOUND"
 	listOfMatchURL := []string{}
-	url := "https://gol.gg/players/list/season-ALL/split-ALL/tournament-World%20Championship%202022/"
+	url := "https://gol.gg/players/list/season-ALL/split-ALL/tournament-World%20Championship%202023/"
 	if !mainEvent {
-		url = "https://gol.gg/players/list/season-ALL/split-ALL/tournament-World%20Championship%20Play-In%202022/"
+		url = "https://gol.gg/players/list/season-ALL/split-ALL/tournament-Worlds%20Play-In%202023/"
 	}
 	c := colly.NewCollector(colly.AllowedDomains("www.gol.gg", "gol.gg"))
 
@@ -278,26 +298,48 @@ func getWorldsID(s *discordgo.Session, playerName string, mainEvent bool) {
 	})
 
 	c.Visit(url)
+	qualFlag := false
+	qualNames := []string{"adam", "crownie", "gori", "huhi", "labrov", "licorice", "river", "sheo", "stixxay", "nuc"}
+	for _, s := range qualNames {
+		if playerName == s {
+			qualFlag = true
+		}
+	}
+
+	if qualFlag {
+		c.Visit("https://gol.gg/players/list/season-ALL/split-ALL/tournament-Worlds%20Qualifying%20Series%202023/")
+	}
+
 	if id == "NOT FOUND" {
 		s.ChannelMessageSend(chatString, "Not found")
 
 	} else {
-		points := getWorldsStats(s, id, playerName, true, mainEvent)
+		points := getWorldsStats(s, id, playerName, true, mainEvent, false)
 		msg := fmt.Sprintf("# Player: %s Total Points: %.2f", playerName, points)
+		s.ChannelMessageSend(chatString, msg)
+	}
+}
+
+func updatePlayinTeams(s *discordgo.Session, playinList []string, playinListID []string) {
+	for index, value := range playinListID {
+		points := getWorldsStats(s, value, playinList[index], false, true, false)
+		points += getWorldsStats(s, value, playinList[index], false, false, true)
+		msg := fmt.Sprintf("### Player: %s Points: %.2f", playinList[index], points)
+		insertInSheet(spreadsheetID, points, "", index, true)
 		s.ChannelMessageSend(chatString, msg)
 	}
 }
 
 func updateWorlds(s *discordgo.Session, listUsers []string, list []string, user string, mainEvent bool) {
 	for index, value := range list {
-		points := getWorldsStats(s, value, listUsers[index], false, mainEvent)
+		points := getWorldsStats(s, value, listUsers[index], false, mainEvent, false)
 		msg := fmt.Sprintf("### Player: %s Points: %.2f", listUsers[index], points)
 		insertInSheet(spreadsheetID, points, user, index+3, mainEvent)
 		s.ChannelMessageSend(chatString, msg)
 	}
 }
 
-func getWorldsStats(s *discordgo.Session, id string, playerName string, infoFlag bool, mainEvent bool) float64 {
+func getWorldsStats(s *discordgo.Session, id string, playerName string, infoFlag bool, mainEvent bool, qualFlagCheck bool) float64 {
 	totalPoints := 0.0
 	list := []string{}
 	listOfMatchURL := []string{}
@@ -306,9 +348,9 @@ func getWorldsStats(s *discordgo.Session, id string, playerName string, infoFlag
 	time := ""
 	result := ""
 
-	url := "https://gol.gg/players/player-matchlist/" + id + "/season-ALL/split-ALL/tournament-World%20Championship%202022/"
+	url := "https://gol.gg/players/player-matchlist/" + id + "/season-ALL/split-ALL/tournament-World%20Championship%202023/"
 	if !mainEvent {
-		url = "https://gol.gg/players/player-matchlist/" + id + "/season-ALL/split-ALL/tournament-World%20Championship%20Play-In%202022/"
+		url = "https://gol.gg/players/player-matchlist/" + id + "/season-ALL/split-ALL/tournament-Worlds%20Play-In%202023/"
 	}
 	c := colly.NewCollector(colly.AllowedDomains("www.gol.gg", "gol.gg"))
 
@@ -338,6 +380,18 @@ func getWorldsStats(s *discordgo.Session, id string, playerName string, infoFlag
 	})
 
 	c.Visit(url)
+	qualFlag := false
+	qualNames := []string{"adam", "crownie", "gori", "huhi", "labrov", "licorice", "river", "sheo", "stixxay", "nuc"}
+	for _, str := range qualNames {
+		if playerName == str {
+			qualFlag = true
+		}
+	}
+
+	if qualFlag && !qualFlagCheck {
+		c.Visit("https://gol.gg/players/player-matchlist/" + id + "/season-ALL/split-ALL/tournament-Worlds%20Qualifying%20Series%202023/")
+	}
+
 	for _, value := range listOfMatchURL {
 		points, msg := checkGameStats(value, playerName)
 		result = list[resultIndex]
@@ -437,13 +491,13 @@ func checkGameStats(linkString string, player string) (float64, string) {
 			fbFlag := (listFB[1] && side == 0) || (!listFB[1] && side == 7)
 			listFormatString = append(listFormatString, kda, minions, listTeamInfo[side+1], listTeamInfo[side+2], listTeamInfo[side+3], strconv.FormatBool(fbFlag))
 			kills, _ := strconv.ParseFloat((strings.Split(kda, "/"))[0], 64)
-			if kills > 10.0 {
+			if kills >= 10.0 {
 				killBonus = 2.0
 			}
 			kills = kills * 3
 			deaths, _ := strconv.ParseFloat((strings.Split(kda, "/"))[1], 64)
 			assists, _ := strconv.ParseFloat((strings.Split(kda, "/"))[2], 64)
-			if assists > 10.0 {
+			if assists >= 10.0 {
 				assistBonus = 2.0
 			}
 			assists = assists * 2
@@ -525,7 +579,10 @@ func insertInSheet(spreadsheetID string, points float64, user string, index int,
 		rangeToWrite += "O" + strconv.Itoa(index)
 	case "quincy":
 		rangeToWrite += "Q" + strconv.Itoa(index)
+	case "":
+		rangeToWrite += playinTeamsUpdate(index)
 	}
+
 	//Alex C3-C9 Patrick E3-E9 Krikor G3-G9 Felix I3-I9
 	//Alec K3-K9 Gabriel M3-M9 Kenneth O3-O9 Quincy Q3-Q9
 
@@ -547,6 +604,32 @@ func insertInSheet(spreadsheetID string, points float64, user string, index int,
 	log.Println("Value updated successfully.")
 }
 
+func playinTeamsUpdate(index int) string {
+	switch index {
+	case 0:
+		return "I" + strconv.Itoa(13)
+	case 1:
+		return "I" + strconv.Itoa(14)
+	case 2:
+		return "E" + strconv.Itoa(15)
+	case 3:
+		return "E" + strconv.Itoa(16)
+	case 4:
+		return "I" + strconv.Itoa(17)
+	case 5:
+		return "O" + strconv.Itoa(13)
+	case 6:
+		return "Q" + strconv.Itoa(14)
+	case 7:
+		return "Q" + strconv.Itoa(15)
+	case 8:
+		return "M" + strconv.Itoa(16)
+	case 9:
+		return "K" + strconv.Itoa(17)
+	}
+	return ""
+}
+
 func formatStatMsg(listFormatString []string, listFormatFloat []float64) string {
 	for _, v := range listFormatFloat {
 		listFormatString = append(listFormatString, fmt.Sprintf("%f", v))
@@ -563,10 +646,10 @@ func formatStatMsg(listFormatString []string, listFormatFloat []float64) string 
 		" A: " + listFormatString[10][:len(listFormatString[10])-4] + " M: " + listFormatString[11][:len(listFormatString[11])-4] + "\n" +
 		"T: " + listFormatString[12][:len(listFormatString[12])-4] + " DG: " + listFormatString[13][:len(listFormatString[13])-4] +
 		" B: " + listFormatString[14][:len(listFormatString[14])-4] + "\n"
-	if listFormatFloat[0]/3 > 10 {
+	if listFormatFloat[0]/3 >= 10 {
 		msg += " *Kill Bonus +2* "
 	}
-	if listFormatFloat[2]/2 > 10 {
+	if listFormatFloat[2]/2 >= 10 {
 		msg += " *Assist Bonus +2* "
 	}
 	if listFormatString[7] == "true" {
@@ -1000,6 +1083,16 @@ func convertTime(s string) bool {
 	totalSeconds := (minutes * 60) + seconds
 	if totalSeconds < 1800 {
 		return true
+	}
+	return false
+}
+
+func elementExists(list []string, target string) bool {
+	for _, item := range list {
+		println(item + " " + target)
+		if strings.EqualFold(item, target) {
+			return true
+		}
 	}
 	return false
 }
